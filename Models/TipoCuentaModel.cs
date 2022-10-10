@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace ManejoPresupuesto.Models {
+    
     public class TipoCuentaModel {
         public int Id { get; set; }
 
@@ -13,6 +14,17 @@ namespace ManejoPresupuesto.Models {
 
         public int UsuarioID { get; set; }
         public int Orden { get; set; }
+
+        /* Se hereda de IValidatableObject
+         * public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+            if (Nombre != null && Nombre.Length > 0) {
+                var primeraLetra = Nombre[0].ToString();
+
+                if (primeraLetra != primeraLetra.ToUpper()) {
+                    yield return new ValidationResult("La primera letra debe ser mayúscula", new[] { nameof(Nombre) });
+                }
+            }
+        } */
 
         /* Otras validaciones por defecto */
         /*[Required(ErrorMessage = "El campo {0} es requerido")]
