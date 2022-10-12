@@ -35,9 +35,10 @@ namespace ManejoPresupuesto.Controllers {
 
             await tiposCuentasRepository.Crear(tipoCuenta);
 
-            return View();
+            return RedirectToAction("Index");
         }
 
+        /* Verifica la existencia de un tipo de cuenta desde JS */
         [HttpGet]
         public async Task<IActionResult> VerificaExistenciaTipoCuenta(string nombre) {
             var usuarioID = 1;
@@ -48,6 +49,14 @@ namespace ManejoPresupuesto.Controllers {
             }
 
             return Json(true);
+        }
+
+        /* Listado de Tipos Cuentas por Usuario ID */
+        public async Task<IActionResult> Index() {
+            var usuarioID = 1;
+            var tiposCuentas = await tiposCuentasRepository.ObtenerListadoByUsuarioID(usuarioID);
+
+            return View(tiposCuentas);  
         }
     }
 }

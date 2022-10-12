@@ -29,5 +29,14 @@ namespace ManejoPresupuesto.Services {
 
             return existe == 1;
         }
+
+        /* Listado de Tipos Cuentas */
+        public async Task<IEnumerable<TipoCuentaModel>> ObtenerListadoByUsuarioID(int usuarioID) {
+            using var connection = new SqlConnection(conecctionString);
+
+            return await connection.QueryAsync<TipoCuentaModel>(@"SELECT Id, Nombre, Orden 
+                                                                  FROM TiposCuentas
+                                                                  WHERE UsuarioID = @UsuarioID", new { usuarioID });
+        }
     }
 }
