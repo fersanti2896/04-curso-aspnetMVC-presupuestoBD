@@ -14,8 +14,8 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Acciones</th>
             <th>Nombre</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,7 @@
                 </td>
                 <td>
                     <a class="btn btn-warning" asp-action="Editar" asp-route-id="@tipoCuenta.Id">Editar</a>
-                    <a class="btn btn-danger">Borrar</a>
+                    <a class="btn btn-danger" asp-action="Borrar" asp-route-id="@tipoCuenta.Id">Borrar</a>
                 </td>
             </tr>
         }

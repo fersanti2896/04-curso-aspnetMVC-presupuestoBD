@@ -57,5 +57,13 @@ namespace ManejoPresupuesto.Services {
                                             SET Nombre = @Nombre
                                             WHERE Id = @Id", tipoCuenta);
         }
+
+        /* Borrando un tipo de cuenta */
+        public async Task BorrartipoCuenta(int id) {
+            using var connection = new SqlConnection(conecctionString);
+
+            await connection.ExecuteAsync(@"DELETE TiposCuentas
+                                            WHERE Id = @Id", new { id });
+        }
     }
 }
