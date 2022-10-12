@@ -7,9 +7,11 @@ using Microsoft.Data.SqlClient;
 namespace ManejoPresupuesto.Controllers {
     public class TiposCuentasController : Controller {
         private readonly ITiposCuentasRepository tiposCuentasRepository;
+        private readonly IUsuarioRepository usuarioRepository;
 
-        public TiposCuentasController(ITiposCuentasRepository tiposCuentasRepository) {
+        public TiposCuentasController(ITiposCuentasRepository tiposCuentasRepository, IUsuarioRepository usuarioRepository) {
             this.tiposCuentasRepository = tiposCuentasRepository;
+            this.usuarioRepository = usuarioRepository;
         }
 
         public IActionResult Crear() {
@@ -23,7 +25,7 @@ namespace ManejoPresupuesto.Controllers {
                 return View(tipoCuenta);
             }
 
-            tipoCuenta.UsuarioID = 1;
+            tipoCuenta.UsuarioID = usuarioRepository.ObtenerUsuarioID();
 
             var existeTipoCuenta = await tiposCuentasRepository.ExisteTipoCuenta(tipoCuenta.Nombre, tipoCuenta.UsuarioID);
 
@@ -41,7 +43,7 @@ namespace ManejoPresupuesto.Controllers {
         /* Verifica la existencia de un tipo de cuenta desde JS */
         [HttpGet]
         public async Task<IActionResult> VerificaExistenciaTipoCuenta(string nombre) {
-            var usuarioID = 1;
+            var usuarioID = usuarioRepository.ObtenerUsuarioID();
             var existeTipoCuenta = await tiposCuentasRepository.ExisteTipoCuenta(nombre, usuarioID);
 
             if (existeTipoCuenta) { 
@@ -53,7 +55,7 @@ namespace ManejoPresupuesto.Controllers {
 
         /* Listado de Tipos Cuentas por Usuario ID */
         public async Task<IActionResult> Index() {
-            var usuarioID = 1;
+            var usuarioID = usuarioRepository.ObtenerUsuarioID();
             var tiposCuentas = await tiposCuentasRepository.ObtenerListadoByUsuarioID(usuarioID);
 
             return View(tiposCuentas);  
