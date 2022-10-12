@@ -38,5 +38,24 @@ namespace ManejoPresupuesto.Services {
                                                                   FROM TiposCuentas
                                                                   WHERE UsuarioID = @UsuarioID", new { usuarioID });
         }
+
+        /* Obtiene la información del tipo de cuenta por su id */
+        public async Task<TipoCuentaModel> ObtenerTipoCuentaById(int id, int usuarioID) {
+            using var connection = new SqlConnection(conecctionString);
+
+            return await connection.QueryFirstOrDefaultAsync<TipoCuentaModel>(@"SELECT Id, Nombre, Orden
+                                                                                FROM TiposCuentas
+                                                                                WHERE Id = @Id AND UsuarioID = @UsuarioID",
+                                                                                new { id, usuarioID });
+        }
+
+        /* Actualizando un tipo de cuenta */
+        public async Task ActualizarTipoCuenta(TipoCuentaModel tipoCuenta) {
+            using var connection = new SqlConnection(conecctionString);
+
+            await connection.ExecuteAsync(@"UPDATE TiposCuentas
+                                            SET Nombre = @Nombre
+                                            WHERE Id = @Id", tipoCuenta);
+        }
     }
 }
