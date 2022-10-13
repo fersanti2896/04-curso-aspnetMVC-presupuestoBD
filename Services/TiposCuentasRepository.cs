@@ -12,9 +12,12 @@ namespace ManejoPresupuesto.Services {
 
         public async Task Crear(TipoCuentaModel tipoCuenta) { 
             using var connection = new SqlConnection(conecctionString);
-            var id = await connection.QuerySingleAsync<int>($@"INSERT INTO TiposCuentas(Nombre, UsuarioID, Orden)
-                                                               VALUES (@Nombre, @UsuarioID, 0);
-                                                               SELECT SCOPE_IDENTITY();", tipoCuenta);
+            var id = await connection.QuerySingleAsync<int>("TiposCuentas_Insertar",
+                                                            new { 
+                                                                UsuarioID = tipoCuenta.UsuarioID,
+                                                                Nombre = tipoCuenta.Nombre
+                                                            }, 
+                                                            commandType: System.Data.CommandType.StoredProcedure);
 
             tipoCuenta.Id = id;
         }
