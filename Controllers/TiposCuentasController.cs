@@ -129,5 +129,30 @@ namespace ManejoPresupuesto.Controllers {
 
             return RedirectToAction("Index");
         }
+
+        /* Ordena el listado en base a como se mapean en el front */
+        [HttpPost]
+        public async Task<IActionResult> OrdenarTipoCuenta([FromBody] int[] ids) {
+            var usuarioID = usuarioRepository.ObtenerUsuarioID();
+            var tiposCuentas = await tiposCuentasRepository.ObtenerListadoByUsuarioID(usuarioID);
+            var idsTiposCuentas = tiposCuentas.Select(x => x.Id);
+
+            /* Verifica que los ids que se reciben sean del usuario */
+            var idsTiposCuentasNoUser = ids.Except(idsTiposCuentas).ToList();
+
+            if (idsTiposCuentasNoUser.Count > 0) {
+                return Forbid();
+            }
+
+            var tiposCuentasOrdenados = ids.Select((val, index) => 
+                                                    new TipoCuentaModel() { 
+                                                        Id = val,
+                                                        Orden = index + 1
+                                                    }).AsEnumerable();
+
+            await tiposCuentasRepository.OrdenarTiposCuentas(tiposCuentasOrdenados);
+
+            return Ok();
+        }
     }
 }

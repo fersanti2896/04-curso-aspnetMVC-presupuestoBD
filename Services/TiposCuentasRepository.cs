@@ -36,7 +36,8 @@ namespace ManejoPresupuesto.Services {
 
             return await connection.QueryAsync<TipoCuentaModel>(@"SELECT Id, Nombre, Orden 
                                                                   FROM TiposCuentas
-                                                                  WHERE UsuarioID = @UsuarioID", new { usuarioID });
+                                                                  WHERE UsuarioID = @UsuarioID        
+                                                                  ORDER BY Orden", new { usuarioID });
         }
 
         /* Obtiene la información del tipo de cuenta por su id */
@@ -64,6 +65,15 @@ namespace ManejoPresupuesto.Services {
 
             await connection.ExecuteAsync(@"DELETE TiposCuentas
                                             WHERE Id = @Id", new { id });
+        }
+
+        /* Ordenar los Tipos Cuentas */
+        public async Task OrdenarTiposCuentas(IEnumerable<TipoCuentaModel> tipoCuentasOrdenados) {
+            using var connection = new SqlConnection(conecctionString);
+
+            await connection.ExecuteAsync(@"UPDATE TiposCuentas
+                                            SET Orden = @Orden
+                                            WHERE Id = @Id", tipoCuentasOrdenados);
         }
     }
 }
